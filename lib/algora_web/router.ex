@@ -70,6 +70,9 @@ defmodule AlgoraWeb.Router do
     live_session :authenticated,
       layout: {AlgoraWeb.Layouts, :user},
       on_mount: [{AlgoraWeb.UserAuth, :ensure_authenticated}, Nav] do
+      live "/home", User.DashboardLive, :index
+      live "/dashboard", User.DashboardLive, :index
+      live "/settings", User.SettingsLive, :edit
       live "/user/transactions", User.TransactionsLive, :index
       live "/user/settings", User.SettingsLive, :edit
       live "/user/installations", User.InstallationsLive, :index
@@ -211,6 +214,12 @@ defmodule AlgoraWeb.Router do
         live "/issues/:number", BountyLive
         live "/pull/:number", BountyLive
       end
+    end
+
+    get "/profile", UserController, :profile
+
+    scope "/users/:handle" do
+      get "/", UserController, :index
     end
 
     scope "/:handle" do
